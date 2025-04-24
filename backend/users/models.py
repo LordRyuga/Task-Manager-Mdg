@@ -62,5 +62,27 @@ class CustomUser(AbstractBaseUser):
         return self.username    
     objects = CustomUserManager()
 
+class Classrooms(models.Model):
+    class_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=111)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.class_id
     
+class Assignments(models.Model):
+    ass_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=111)
+    class_id = models.ForeignKey('Classrooms', on_delete=models.CASCADE, related_name = 'assignments')
+
+    def __str__(self):
+        return self.ass_id
+
+class Class_Membership(models.Model):
+    s_no = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name = 'users_id')
+    class_id = models.ForeignKey('Classrooms', on_delete=models.CASCADE, related_name = 'class_Ids')
+
+    def __str__(self):
+        return self.s_no 
 # Create your models here.
