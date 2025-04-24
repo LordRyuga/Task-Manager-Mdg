@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, username, firstName=None, lastName=None, password=None):
+    def create_user(self, email, username, firstName=None, lastName=None, password=None, isStudent=True):
         if not email:
             raise ValueError('Users must have an email address')
         if not username:
@@ -12,11 +12,12 @@ class CustomUserManager(BaseUserManager):
             username=username,
             firstName=firstName,
             lastName=lastName,
+            isStudent=isStudent,
         )
         user.set_password(password)
         user.save()
         return user
-    def create_superuser(self, email, username, password=None, firstName=None, lastName=None):
+    def create_superuser(self, email, username, password=None, firstName=None, lastName=None, isStudent=False):
         user = self.create_user(
             email,
             password=password,
@@ -35,6 +36,7 @@ class CustomUser(AbstractBaseUser):
     username = models.CharField(max_length=30, unique=True)
     firstName = models.CharField(max_length=30, blank=True, null=True)
     lastName = models.CharField(max_length=30, blank=True, null=True)
+    isStudent = models.BooleanField(default=True)
 
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
